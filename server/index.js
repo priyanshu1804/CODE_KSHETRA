@@ -6,6 +6,11 @@ const indiviualroute=require('./routes/indiviual.js');
 const ngoroute=require('./routes/NGO.js');
 const donateroute=require('./routes/Donate.js');
 const requestroute=require('./routes/Request.js');
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 const bodyParser=require('body-parser');
 app.use(bodyParser.json());
 require('dotenv').config();
