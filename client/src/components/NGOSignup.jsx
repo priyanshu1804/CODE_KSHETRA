@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Assuming you will use Axios for the API call
+import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { makeUnauthenticatedPOSTRequest } from "../utils/serverHelpers";
+import { motion } from "framer-motion";
 
 const NGOSignup = () => {
   const [organizationName, setOrganizationName] = useState("");
@@ -8,25 +10,23 @@ const NGOSignup = () => {
   const [organizationContact, setOrganizationContact] = useState("");
   const [organizationEmail, setOrganizationEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [organizationWebsite, setOrganizationWebsite] = useState("");
   const [gstNumber, setGstNumber] = useState("");
-  const [error, setError] = useState("");
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [cookies, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
 
-    // Validate all fields
-    if (
-      !organizationName ||
-      !organizationAddress ||
-      !organizationContact ||
-      !organizationEmail ||
-      !password ||
-      !gstNumber
-    ) {
-      setError("All fields are required!");
+    if (!agreeToTerms) {
+      alert("You must agree to the Terms and Services to sign up.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match. Please try again.");
       return;
     }
 
@@ -41,106 +41,58 @@ const NGOSignup = () => {
     };
 
     try {
-      // API call to your backend to create the NGO
-      const response = await axios.post("/api/ngo-signup", ngoData);
-      if (response.status === 200) {
-        navigate("/NGO-login"); // Redirect to login page after successful signup
+      const response = await makeUnauthenticatedPOSTRequest("/ngo/signup", ngoData);
+
+      if (response && !response.err) {
+        const token = response.token;
+        const date = new Date();
+        date.setDate(date.getDate() + 30);
+        setCookie("token", token, { path: "/", expires: date });
+        navigate("/ngo-login");
+      } else {
+        alert("Signup failed. Please try again.");
       }
-    } catch (err) {
-      setError("An error occurred during signup. Please try again.");
+    } catch (error) {
+      console.error("Signup Error:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">NGO Signup</h2>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        <form onSubmit={handleSignup}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Organization Name:</label>
-            <input
-              type="text"
-              value={organizationName}
-              onChange={(e) => setOrganizationName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
+      <motion.div 
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md"
+      >
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">NGO Signup</h2>
+        <form onSubmit={handleSignup} className="space-y-4">
+          <motion.input whileFocus={{ scale: 1.05 }} type="text" placeholder="Organization Name" value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <motion.input whileFocus={{ scale: 1.05 }} type="text" placeholder="Address" value={organizationAddress} onChange={(e) => setOrganizationAddress(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <motion.input whileFocus={{ scale: 1.05 }} type="number" placeholder="Contact Number" value={organizationContact} onChange={(e) => setOrganizationContact(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <motion.input whileFocus={{ scale: 1.05 }} type="email" placeholder="Email" value={organizationEmail} onChange={(e) => setOrganizationEmail(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <motion.input whileFocus={{ scale: 1.05 }} type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <motion.input whileFocus={{ scale: 1.05 }} type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <motion.input whileFocus={{ scale: 1.05 }} type="text" placeholder="Website" value={organizationWebsite} onChange={(e) => setOrganizationWebsite(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" />
+          <motion.input whileFocus={{ scale: 1.05 }} type="number" placeholder="GST Number" value={gstNumber} onChange={(e) => setGstNumber(e.target.value)} className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 transition" required />
+          <div className="mb-4 flex items-center">
+            <input type="checkbox" className="mr-2" checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)} />
+            <label className="text-sm text-gray-600">
+              I agree to the <Link className="text-green-500 underline" to="/terms">Terms and Services</Link>
+            </label>
           </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Organization Address:</label>
-            <input
-              type="text"
-              value={organizationAddress}
-              onChange={(e) => setOrganizationAddress(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Contact Number:</label>
-            <input
-              type="number"
-              value={organizationContact}
-              onChange={(e) => setOrganizationContact(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Email:</label>
-            <input
-              type="email"
-              value={organizationEmail}
-              onChange={(e) => setOrganizationEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">Website:</label>
-            <input
-              type="text"
-              value={organizationWebsite}
-              onChange={(e) => setOrganizationWebsite(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700">GST Number:</label>
-            <input
-              type="number"
-              value={gstNumber}
-              onChange={(e) => setGstNumber(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+          <motion.button 
+            whileHover={{ scale: 1.05 }} 
+            whileTap={{ scale: 0.95 }} 
+            type="submit" 
+            className={`w-full ${agreeToTerms ? "bg-green-500 hover:bg-green-600" : "bg-gray-300 cursor-not-allowed"} text-white py-2 rounded-lg transition`} 
+            disabled={!agreeToTerms}
           >
             Sign Up
-          </button>
+          </motion.button>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

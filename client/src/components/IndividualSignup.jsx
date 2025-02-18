@@ -1,52 +1,40 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Assuming you will use Axios for the API call
+import { Link, useNavigate } from "react-router-dom";
+import { makeUnauthenticatedPOSTRequest } from "../utils/serverHelpers";
+import { useCookies } from "react-cookie";
 
-const IndividualSignup = () => {
+const NGOSignup = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [aadharNumber, setAadharNumber] = useState("");
-  const [error, setError] = useState("");
+  const [cookies, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setError("");
 
-    // Validate all fields
-    if (!name || !address || !contact || !email || !password || !aadharNumber) {
-      setError("All fields are required!");
-      return;
-    }
+    const data = { name, address, contact, email, password, aadharNumber };
+    const response = await makeUnauthenticatedPOSTRequest("/ngo/signup", data);
+    if (response && !response.err) {
+      const token = response.token;
+      const date = new Date();
+      date.setDate(date.getDate() + 30);
+      setCookie("token", token, { path: "/", expires: date });
 
-    const individualData = {
-      Name: name,
-      Address: address,
-      Contact: contact,
-      Email: email,
-      password: password,
-      AadharNumber: aadharNumber,
-    };
-
-    try {
-      // API call to your backend to create the individual
-      const response = await axios.post("/api/individual-signup", individualData);
-      if (response.status === 200) {
-        navigate("/individual-login"); // Redirect to login page after successful signup
-      }
-    } catch (err) {
-      setError("An error occurred during signup. Please try again.");
+      alert("Signup Successful!");
+      navigate("/ngo-login");
+    } else {
+      alert("Signup Failed. Please try again.");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">Individual Signup</h2>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+        <h2 className="text-2xl font-semibold text-center mb-4">NGO Signup</h2>
         <form onSubmit={handleSignup}>
           <div className="mb-4">
             <label className="block text-gray-700">Name:</label>
@@ -58,7 +46,6 @@ const IndividualSignup = () => {
               required
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Address:</label>
             <input
@@ -69,7 +56,6 @@ const IndividualSignup = () => {
               required
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Contact Number:</label>
             <input
@@ -80,7 +66,6 @@ const IndividualSignup = () => {
               required
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Email:</label>
             <input
@@ -91,7 +76,6 @@ const IndividualSignup = () => {
               required
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Password:</label>
             <input
@@ -102,7 +86,6 @@ const IndividualSignup = () => {
               required
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Aadhar Number:</label>
             <input
@@ -113,17 +96,22 @@ const IndividualSignup = () => {
               required
             />
           </div>
-
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
           >
             Sign Up
           </button>
+          <Link
+            to="/ngo-login"
+            className="block text-center text-blue-500 mt-4 hover:underline"
+          >
+            Already have an account? Login
+          </Link>
         </form>
       </div>
     </div>
   );
 };
 
-export default IndividualSignup;
+export default NGOSignup;
