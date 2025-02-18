@@ -26,6 +26,10 @@ const NGO=new mongoose.Schema({
     GST_Number:{
         type:Number,
         required:true,
+    },
+    role:{
+        type:String,
+        default:'NGO'
     }
 });
 

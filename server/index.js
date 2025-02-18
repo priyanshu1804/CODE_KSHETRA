@@ -1,6 +1,7 @@
 const express=require('express');
 const app = express();
 const db=require('./db');
+const cors = require('cors');
 const resturentroute=require('./routes/Resturent.js');
 const indiviualroute=require('./routes/indiviual.js');
 const ngoroute=require('./routes/NGO.js');

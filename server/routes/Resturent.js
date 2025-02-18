@@ -40,6 +40,7 @@ route.post('/login',async(req,res)=>{
             Organization_Email:user.Organization_Email
         }
         const token=generateToken(payload)
+        console.log("Token is :", token);
         res.json(token);
     }catch(err){
         console.log(err);

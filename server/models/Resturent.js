@@ -31,7 +31,35 @@ const Resturent=new mongoose.Schema({
     GST_Number:{
         type:Number,
         required:true,
+    },
+    role:{
+        type:String,
+        default:'resturant'
     }
 });
+Resturent.pre('save',async function(next){
+    const user=this;
+    if(!user.isModified('password')){
+        return next();
+    }
+    try{
+        const salt= await bcrypt.genSalt(10);
+        const hashPassword=await bcrypt.hash(user.password,salt);
+        user.password=hashPassword;
+        next();
+    }catch(err){
+        return next(err);
+    }
+})
+
+Resturent.methods.comparePassword=async function(password){
+    try{
+        const ismatch=await bcrypt.compare(password,this.password);
+        return ismatch;
+    }catch(err){
+        res.status(500).json({error:"internal server error"});
+    }
+}
+
 const ResturentModel=mongoose.model('Resturent',Resturent);
 module.exports=ResturentModel;

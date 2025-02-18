@@ -23,6 +23,10 @@ const Indiviual=new mongoose.Schema({
     AadharNumber:{
         type:Number,
         required:true,
+    },
+    role:{
+        type:String,
+        default:'individual'
     }
 });
 
