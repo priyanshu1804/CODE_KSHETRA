@@ -26,7 +26,7 @@ const Community = () => {
         Become a part of our mission to fight hunger and reduce food waste. Connect with other donors, NGOs, and volunteers.
       </motion.p>
       <motion.div
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
