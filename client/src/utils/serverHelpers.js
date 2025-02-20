@@ -1,4 +1,4 @@
-import {backendUrl} from "./config";
+import { backendUrl } from "./config";
 
 export const makeUnauthenticatedPOSTRequest = async (route, body) => {
     const response = await fetch(backendUrl + route, {
@@ -8,22 +8,28 @@ export const makeUnauthenticatedPOSTRequest = async (route, body) => {
         },
         body: JSON.stringify(body),
     });
-    const formattedResponse = await response.json();
-    return formattedResponse;
+    return await response.json();
 };
 
-export const makeAuthenticatedPOSTRequest = async (route, body) => {
+export const makeAuthenticatedPOSTRequest = async (route, body, isFormData = false) => {
     const token = getToken();
+    
+    // Headers object (exclude 'Content-Type' for FormData)
+    const headers = {
+        Authorization: `Bearer ${token}`,
+    };
+    if (!isFormData) {
+        headers["Content-Type"] = "application/json";
+        body = JSON.stringify(body);
+    }
+
     const response = await fetch(backendUrl + route, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(body),
+        headers: isFormData ? headers : { ...headers, "Content-Type": "application/json" },
+        body: body, // FormData or JSON
     });
-    const formattedResponse = await response.json();
-    return formattedResponse;
+
+    return await response.json();
 };
 
 export const makeAuthenticatedGETRequest = async (route) => {
@@ -35,8 +41,7 @@ export const makeAuthenticatedGETRequest = async (route) => {
             Authorization: `Bearer ${token}`,
         },
     });
-    const formattedResponse = await response.json();
-    return formattedResponse;
+    return await response.json();
 };
 
 const getToken = () => {

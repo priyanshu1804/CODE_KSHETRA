@@ -44,7 +44,7 @@ router.delete("/", passport.authenticate("jwt", { session: false }), async (req,
         const user = req.user;
 
         // Restrict access: Only NGOs can delete requests
-        if (user.role !== "NGO") {
+        if (user.role === "NGO") {
             return res.status(403).json({ error: "Access denied. Only NGOs can delete their requests." });
         }
 
@@ -73,11 +73,12 @@ router.get("/", passport.authenticate("jwt", { session: false }), async (req, re
         const user = req.user;
 
         // Restrict access: Only NGOs can view their requests
-        if (user.role !== "NGO") {
+        if (user.role === "NGO") {
             return res.status(403).json({ error: "Access denied. Only NGOs can view food requests." });
         }
 
         const ngoRequests = await Food.find({ user: user._id });
+        console.log("Food requests:", ngoRequests);
         return res.status(200).json({ data: ngoRequests });
 
     } catch (error) {

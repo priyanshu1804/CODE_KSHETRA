@@ -64,9 +64,18 @@ const Header = () => {
           <Link to="/about" className="hover:text-gray-300">About Us</Link>
           <Link to="/contact" className="hover:text-gray-300">Contact Us</Link>
           <Link to="/features" className="hover:text-gray-300">Features</Link>
+
+          {/* Show NGO Portal only for NGOs */}
           {user?.role === "NGO" && (
             <Link to="/ngo-portal" className="hover:text-gray-300">
               NGO Portal
+            </Link>
+          )}
+
+          {/* Show Request Portal for Restaurants & Individuals */}
+          {(user?.role === "Resturent"||user?.role === "Individual") && (
+            <Link to="/request-portal" className="hover:text-gray-300">
+              Request Portal
             </Link>
           )}
         </div>
@@ -74,12 +83,11 @@ const Header = () => {
         <div className="flex gap-4 hidden md:flex">
           {user ? (
             <div className="flex items-center gap-4">
-            <span className="font-semibold">{user?.Name ?? user?.name ?? "User"}</span>
-            <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
-              Logout
-            </button>
-          </div>
-          
+              <span className="font-semibold">{user?.Name ?? user?.name ?? "User"}</span>
+              <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
+                Logout
+              </button>
+            </div>
           ) : (
             <>
               <Link to="/login">
