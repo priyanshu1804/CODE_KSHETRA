@@ -1,6 +1,6 @@
 // components/Request.jsx
 import React, { useState } from "react";
-import axios from "axios"; // For API calls
+import {makeAuthenticatedPOSTRequest} from "../utils/ServerHelpers";
 import { motion } from "framer-motion"; // For animations
 
 const Request = () => {
@@ -31,19 +31,18 @@ const Request = () => {
       requester_phone: requesterPhone,
     };
 
-    try {
-      const response = await axios.post("/api/food-request", requestData);
-      if (response.status === 200) {
-        setSuccess("Your food request has been submitted successfully!");
-      }
-    } catch (err) {
-      setError("An error occurred while submitting your request. Please try again.");
-    }
+    const response = await makeAuthenticatedPOSTRequest("/request/", requestData);
+        
+        if (response.err) {
+            setError("Could not create request");
+            return;
+        }
+        setSuccess("Request created successfully!");
+        setTimeout(() => navigate("/"), 2000);
   };
 
   return (
     <div className="relative min-h-screen bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 p-8">
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="relative z-10 flex items-center justify-center min-h-screen flex-col text-center text-white">
         <motion.h1
@@ -69,66 +68,17 @@ const Request = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-2xl font-semibold mb-4 text-center">Food Request Form</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">Food Request Form</h2>
 
           {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
           {success && <p className="text-green-500 text-sm text-center mb-4">{success}</p>}
 
           <form onSubmit={handleRequestSubmit} className="space-y-6">
-            <div>
-              <label className="block text-gray-700 text-lg font-medium">Item Name:</label>
-              <input
-                type="text"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
-                className="w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 text-lg font-medium">Item Quantity:</label>
-              <input
-                type="number"
-                value={itemQuantity}
-                onChange={(e) => setItemQuantity(e.target.value)}
-                className="w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 text-lg font-medium">Requester Name:</label>
-              <input
-                type="text"
-                value={requesterName}
-                onChange={(e) => setRequesterName(e.target.value)}
-                className="w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 text-lg font-medium">Requester Email:</label>
-              <input
-                type="email"
-                value={requesterEmail}
-                onChange={(e) => setRequesterEmail(e.target.value)}
-                className="w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700 text-lg font-medium">Requester Phone:</label>
-              <input
-                type="text"
-                value={requesterPhone}
-                onChange={(e) => setRequesterPhone(e.target.value)}
-                className="w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
+            <InputField label="Item Name" value={itemName} setValue={setItemName} type="text" />
+            <InputField label="Item Quantity" value={itemQuantity} setValue={setItemQuantity} type="number" />
+            <InputField label="Requester Name" value={requesterName} setValue={setRequesterName} type="text" />
+            <InputField label="Requester Email" value={requesterEmail} setValue={setRequesterEmail} type="email" />
+            <InputField label="Requester Phone" value={requesterPhone} setValue={setRequesterPhone} type="text" />
 
             <motion.button
               type="submit"
@@ -144,5 +94,16 @@ const Request = () => {
     </div>
   );
 };
-
+const InputField = ({ label, value, setValue, type }) => (
+  <div>
+    <label className="block text-gray-700 text-lg font-medium mb-1">{label}:</label>
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      className="w-full px-6 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+      required
+    />
+  </div>
+);
 export default Request;

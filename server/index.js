@@ -1,26 +1,51 @@
-const express=require('express');
-const app = express();
+const express = require("express");
+const mongoose = require("mongoose");
+const JwtStrategy = require("passport-jwt").Strategy,
+ExtractJwt = require("passport-jwt").ExtractJwt;
+const passport = require("passport");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 const db=require('./db');
-const cors = require('cors');
-const resturentroute=require('./routes/Resturent.js');
-const indiviualroute=require('./routes/indiviual.js');
-const ngoroute=require('./routes/NGO.js');
-const donateroute=require('./routes/Donate.js');
-const requestroute=require('./routes/Request.js');
-app.use(cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-const bodyParser=require('body-parser');
+const app = express();
+const User = require("./models/User");
+const Donate = require("./models/donate");
+const UserRoute = require("./routes/User");
+const DonateRoute = require("./routes/Donate");
+const Request = require("./models/Request");
+const RequestRoute = require("./routes/Request");
+const cors = require("cors");
+const { compareSync } = require("bcrypt");
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+let opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = "process.env.JWT_SECRET";
+passport.use(
+    new JwtStrategy(opts, function (jwt_payload, done) {
+        User.findOne({_id: jwt_payload.identifier}, function (err, user) {
+            if (err) {
+                return done(err, false);
+            }
+            if (user) {
+                return done(null, user);
+            } else {
+                return done(null, false);
+            }
+        });
+    })
+);
 app.use(bodyParser.json());
-require('dotenv').config();
-const PORT=process.env.PORT||3000;
-app.use('/indiviual',indiviualroute)
-app.use('/resturent',resturentroute)
-app.use('/ngo',ngoroute)
-app.use('/donate',donateroute)
-app.use('/request',requestroute)
-app.listen(3000,()=>{
-    console.log('connected to server 3000');
+app.use(bodyParser.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 3000;
+app.use("/auth", UserRoute);
+app.use("/donate", DonateRoute);
+app.use("/request", RequestRoute);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

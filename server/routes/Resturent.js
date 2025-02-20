@@ -36,11 +36,9 @@ route.post('/login',async(req,res)=>{
             return res.status(401).json({error:"invalid data"})
         }
         const payload={
-            id:user.id,
-            Organization_Email:user.Organization_Email
+            id:user.id
         }
         const token=generateToken(payload)
-        console.log("Token is :", token);
         res.json(token);
     }catch(err){
         console.log(err);
@@ -69,9 +67,12 @@ route.put('/profile/password',jwtAuthMiddleware,async(req,res)=>{
 })
 route.get('/profile',jwtAuthMiddleware,async(req,res)=>{
     try{
+        const token=req.headers.authorization.split(' ')[1];
+        console.log("token is :",token)
         const userData=req.user
         const userId=userData.id
         const user=await User.findById(userId)
+        console.log("user data is :",user)  
         res.status(200).json({user})
     }catch(err){
         console.log(err);

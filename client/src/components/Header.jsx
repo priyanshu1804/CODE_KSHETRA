@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { makeAuthenticatedGETRequest } from "../utils/serverHelpers";
 
 const Header = () => {
   const [visible, setVisible] = useState(true);
@@ -15,41 +14,47 @@ const Header = () => {
       setVisible(window.scrollY < lastScrollY);
       setLastScrollY(window.scrollY);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll); // Cleanup on unmount
   }, [lastScrollY]);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const token = cookies.token;
-      if (token) {
-        const profileEndpoints = ["/resturent/profile", "/ngo/profile", "/individual/profile"];
-        for (let endpoint of profileEndpoints) {
-          try {
-            const response = await makeAuthenticatedGETRequest(endpoint);
-            console.log(response);
-            if (response.data.user) {
-              setUser(response.data.user);
-              return;
-            }
-          } catch (error) {
-            console.warn(`Error fetching profile from ${endpoint}:`, error);
-          }
-        }
-        setUser(null);
-      } else {
-        setUser(null);
-      }
-    };
-    fetchUserProfile();
-  }, [cookies]);
+  // useEffect(() => {
+  //   const fetchUserProfile = async () => {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) {
+  //       setUser(null);
+  //       return;
+  //     }
 
-  const handleLogout = () => {
-    removeCookie("token", { path: "/" });
-    setUser(null);
-    alert("Logged out successfully");
-  };
+  //     api.setToken(token);
+
+  //     const profileEndpoints = ["/resturent/profile", "/ngo/profile", "/individual/profile"];
+  //     for (let endpoint of profileEndpoints) {
+  //       try {
+  //         const response = await api.get(endpoint, {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         });
+  //         if (response && response.data.user) {
+  //           setUser(response.data.user);
+  //           return;
+  //         }
+  //       } catch (error) {
+  //         console.warn(`Error fetching profile from ${endpoint}:`, error);
+  //       }
+  //     }
+  //     setUser(null);
+  //   };
+
+  //   fetchUserProfile();
+  // }, [cookies.token]); // Re-run when the token changes
+
+  // const handleLogout = () => {
+  //   removeCookie("token", { path: "/" });
+  //   localStorage.removeItem("token");
+  //   setUser(null);
+  //   alert("Logged out successfully");
+  // };
 
   return (
     <header
@@ -78,8 +83,8 @@ const Header = () => {
         </div>
 
         <div className="flex gap-4 hidden md:flex">
-          {!user ? (
-            <>
+          {/* {!user ? (
+            <> */}
               <Link to="/login">
                 <button className="px-4 py-2 bg-white text-green-600 rounded hover:bg-green-200">
                   Login
@@ -90,15 +95,15 @@ const Header = () => {
                   Sign Up
                 </button>
               </Link>
-            </>
+            {/* </>
           ) : (
-            <div className="flex items-center gap-2">
-              <span>{user.name}</span>
-              <button onClick={handleLogout} className="text-white hover:text-gray-300">
+            <div className="flex items-center gap-4">
+              <span className="font-semibold">{user.Organization_Name || user.name}</span>
+              <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
                 Logout
               </button>
             </div>
-          )}
+          )} */}
         </div>
       </nav>
     </header>

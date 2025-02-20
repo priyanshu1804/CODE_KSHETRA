@@ -1,29 +1,28 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { makeUnauthenticatedPOSTRequest } from "../utils/serverHelpers";
-import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const IndividualLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cookies, setCookie] = useCookies(["token"]);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const data = { email, password };
-    const response = await makeUnauthenticatedPOSTRequest("/individual/login", data);
-    if (response && !response.err) {
-      const token = response.token;
-      const date = new Date();
-      date.setDate(date.getDate() + 30);
-      setCookie("token", token, { path: "/", expires: date });
+    try {
+      const response = await api.post("/individual/login", {
+        email,
+        password,
+      });
 
-      alert("Login Successful!");
+      const token = response.data.token;
+      localStorage.setItem("token", token);
       navigate("/");
-    } else {
-      alert("Login Failed. Please check your credentials and try again.");
+    } catch (error) {
+      setError("Invalid Email or Password");
     }
   };
 
@@ -31,6 +30,7 @@ const IndividualLogin = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-semibold text-center mb-4">Individual Login</h2>
+        {error && <div className="text-red-500 text-sm text-center mb-4">{error}</div>}
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700">Email:</label>
@@ -58,12 +58,6 @@ const IndividualLogin = () => {
           >
             Login
           </button>
-          <Link
-            to="/signup"
-            className="block text-center text-blue-500 mt-4 hover:underline"
-          >
-            Register
-          </Link>
         </form>
       </div>
     </div>

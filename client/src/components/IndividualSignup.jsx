@@ -1,117 +1,129 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { makeUnauthenticatedPOSTRequest } from "../utils/serverHelpers";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import api from "../utils/api";
+import { motion } from "framer-motion";
 
-const NGOSignup = () => {
+const IndividualSignup = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [aadharNumber, setAadharNumber] = useState("");
+  const [error, setError] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const data = { name, address, contact, email, password, aadharNumber };
-    const response = await makeUnauthenticatedPOSTRequest("/ngo/signup", data);
-    if (response && !response.err) {
-      const token = response.token;
-      const date = new Date();
-      date.setDate(date.getDate() + 30);
-      setCookie("token", token, { path: "/", expires: date });
+    try {
+      const response = await api.post("/individual/signup", {
+        name,
+        address,
+        contact,
+        email,
+        password,
+        aadharNumber,
+      });
 
-      alert("Signup Successful!");
-      navigate("/ngo-login");
-    } else {
-      alert("Signup Failed. Please try again.");
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      navigate("/individual-login");
+    } catch (error) {
+      setError("Signup failed. Please check your details and try again.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-semibold text-center mb-4">NGO Signup</h2>
-        <form onSubmit={handleSignup}>
-          <div className="mb-4">
-            <label className="block text-gray-700">Name:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Address:</label>
-            <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Contact Number:</label>
-            <input
-              type="number"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Aadhar Number:</label>
-            <input
-              type="number"
-              value={aadharNumber}
-              onChange={(e) => setAadharNumber(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
-          >
-            Sign Up
-          </button>
-          <Link
-            to="/ngo-login"
-            className="block text-center text-blue-500 mt-4 hover:underline"
-          >
-            Already have an account? Login
-          </Link>
-        </form>
-      </div>
-    </div>
+    <motion.div 
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="register-form-container bg-gradient-to-r from-green-400 to-blue-500 p-6 rounded-lg shadow-xl"
+    >
+      <h2 className="text-white text-3xl font-bold text-center mb-4">Individual Signup</h2>
+      {error && <div className="error text-red-500 text-center">{error}</div>}
+      <form onSubmit={handleSignup} className="space-y-4">
+        <div className="form-group">
+          <label htmlFor="name" className="text-white">Name:</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 rounded border focus:ring-2 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="address" className="text-white">Address:</label>
+          <input
+            type="text"
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="w-full p-2 rounded border focus:ring-2 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="contact" className="text-white">Contact Number:</label>
+          <input
+            type="number"
+            id="contact"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            className="w-full p-2 rounded border focus:ring-2 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="email" className="text-white">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 rounded border focus:ring-2 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password" className="text-white">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 rounded border focus:ring-2 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="aadharNumber" className="text-white">Aadhar Number:</label>
+          <input
+            type="number"
+            id="aadharNumber"
+            value={aadharNumber}
+            onChange={(e) => setAadharNumber(e.target.value)}
+            className="w-full p-2 rounded border focus:ring-2 focus:ring-blue-300"
+            required
+          />
+        </div>
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Sign Up
+        </motion.button>
+      </form>
+    </motion.div>
   );
 };
 
-export default NGOSignup;
+export default IndividualSignup;
