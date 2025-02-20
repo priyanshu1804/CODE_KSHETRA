@@ -1,7 +1,6 @@
 // components/Community.jsx
 import React from 'react';
 import Button from './ui/button';
-import { makeAuthenticatedGETRequest } from "../utils/ServerHelpers";
 import { FaUsers } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
