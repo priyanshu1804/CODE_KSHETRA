@@ -5,6 +5,7 @@ import Login from './routes/Login'
 import Signup from './routes/Signup'
 import Donation from './routes/Donation';
 import Request from './routes/Request';
+import NgoPortal from './routes/NgoPortal'
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/donate" element={<Donation />} />
               <Route path="/request" element={<Request />} />
+              <Route path="/ngo-portal" element={<NgoPortal />} />
             </>
           </Routes>
         </BrowserRouter>

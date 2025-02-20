@@ -40,9 +40,20 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
     }
 });
 
-router.get("/",passport.authenticate("jwt", {session: false}),async(req,res)=>{
-    const response=await Food.find({});
-    return res.status(200).json(response);
-});
+router.get("/", async (req, res) => {
+    try {
+      const donations = await Food.find({});
+      console.log("Sending Donations:", donations); // ✅ Ensure data is correct
+  
+      if (!donations.length) {
+        return res.status(404).json({ message: "No donations found" });
+      }
+      res.status(200).json(donations); // ✅ Explicitly send JSON array
+    } catch (error) {
+      console.error("Error fetching donations:", error);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
+  
 
 module.exports=router;
