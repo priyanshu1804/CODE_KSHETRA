@@ -25,6 +25,7 @@ const Contact = () => {
         Have questions or want to partner with us? Reach out to our team.
       </motion.p>
       <motion.div
+      
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300 }}

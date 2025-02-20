@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 import Button from './ui/button';
 import { FaDonate, FaHandsHelping } from 'react-icons/fa';
+import { Typewriter } from 'react-simple-typewriter';
 
 const Hero = () => {
   const navigate = useNavigate(); // Initialize navigate
@@ -28,14 +29,27 @@ const Hero = () => {
       >
         Donate Surplus Food & Help Those in Need
       </motion.h2>
-      <motion.p
-        className="text-gray-600 mt-4 max-w-2xl text-sm md:text-lg"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-      >
-        Whether you're a restaurant or an individual, contribute to reducing food waste by donating surplus food. NGOs will pick it up and distribute it to those in need.
-      </motion.p>
+      
+
+      <motion.div
+  className="text-gray-600 mt-4 max-w-2xl text-sm md:text-lg"
+  initial={{ opacity: 0, y: -20 }} // Fade in + slight upward motion
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1 }}
+>
+  <Typewriter
+    words={[
+      "Whether you're a restaurant or an individual, contribute to reducing food waste by donating surplus food.NGOs will pick it up and distribute it to those in need."
+    ]}
+    cursor
+    cursorStyle="_"
+    typeSpeed={20}  // Faster typing speed
+    deleteSpeed={10} // Faster deleting speed
+  />
+</motion.div>
+
+
+
       <div className="flex flex-col md:flex-row gap-6 mt-6">
         <motion.div whileHover={{ scale: 1.1 }}>
           <Button className="bg-green-600 text-white flex items-center gap-2" onClick={handleDonateNowClick}>
