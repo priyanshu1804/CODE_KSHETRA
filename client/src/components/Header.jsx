@@ -52,18 +52,18 @@ const Header = () => {
         </div>
 
         <div className="md:hidden flex items-center" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          <button className="text-white">
+          <button className="text-white ">
             <div className="w-6 h-0.5 bg-white mb-1"></div>
             <div className="w-6 h-0.5 bg-white mb-1"></div>
             <div className="w-6 h-0.5 bg-white"></div>
-          </button>
+          </button>   
         </div>
 
-        <div className="hidden md:flex gap-6">
-          <Link to="/" className="hover:text-gray-300">Home</Link>
-          <Link to="/about" className="hover:text-gray-300">About Us</Link>
-          <Link to="/contact" className="hover:text-gray-300">Contact Us</Link>
-          <Link to="/features" className="hover:text-gray-300">Features</Link>
+        <div className="hidden md:flex gap-9 text-xl">
+          <Link to="/" className="hover:text-white mb-1">Home</Link>
+          <Link to="/about" className="hover:text-white mb-1">About Us</Link>
+          <Link to="/contact" className="hover:text-white mb-1">Contact Us</Link>
+          <Link to="/features" className="hover:text-white mb-1">Features</Link>
           {user?.role === "NGO" && (
             <Link to="/ngo-portal" className="hover:text-gray-300">
               NGO Portal

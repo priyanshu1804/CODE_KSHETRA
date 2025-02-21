@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 import Button from './ui/button';
-import { FaDonate, FaHandsHelping } from 'react-icons/fa';
+import { FaDonate, FaHandsHelping, FaCookie } from 'react-icons/fa';
 import { Typewriter } from 'react-simple-typewriter';
 
 const Hero = () => {
@@ -53,7 +53,12 @@ const Hero = () => {
       <div className="flex flex-col md:flex-row gap-6 mt-6">
         <motion.div whileHover={{ scale: 1.1 }}>
           <Button className="bg-green-600 text-white flex items-center gap-2" onClick={handleDonateNowClick}>
-            <FaDonate /> Donate Now
+            <FaDonate /> Donate Money
+          </Button>
+        </motion.div>
+        <motion.div whileHover={{ scale: 1.1 }}>
+          <Button className="bg-green-600 text-white flex items-center gap-2" onClick={handleDonateNowClick}>
+            <FaCookie/> Donate Food
           </Button>
         </motion.div>
         <motion.div whileHover={{ scale: 1.1 }}>
