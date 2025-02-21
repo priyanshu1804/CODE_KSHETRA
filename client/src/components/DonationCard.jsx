@@ -1,11 +1,10 @@
 import React from "react";
 import { FaThumbsUp } from "react-icons/fa";
-import { motion } from "framer-motion"; // Import motion for animation
-import Button from './ui/button'; // Make sure the Button component is imported or defined elsewhere
+import { motion } from "framer-motion";
+import Button from './ui/button'; 
 
 const DonationCard = ({ donation }) => {
   const handleDonateNowClick = () => {
-    // Handle the donation button click event (e.g., open a donation modal, redirect, etc.)
     console.log("Donate Now clicked");
   };
 

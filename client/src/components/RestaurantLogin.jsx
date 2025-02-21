@@ -19,7 +19,7 @@ const RestaurantLogin = () => {
       });
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
-        api.setToken(response.data.token); // Ensure API has the token
+        api.setToken(response.data.token);
         navigate("/");
       } else {
         setError("Login failed. No token received.");

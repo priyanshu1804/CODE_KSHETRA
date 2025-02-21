@@ -6,14 +6,14 @@ import { useCookies } from "react-cookie";
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [cookies, , removeCookie] = useCookies(["token"]);
-  const [user, setUser] = useState(null); // ✅ Set default state to null
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await makeAuthenticatedGETRequest("/auth/profile");
         console.log("User data received:", response);
-        setUser(response?.data || response); // ✅ Ensure correct data is set
+        setUser(response?.data || response);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -36,22 +36,20 @@ const Header = () => {
         </div>
 
         <div className="md:hidden flex items-center" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          <button className="text-white ">
+          <button className="text-white">
             <div className="w-6 h-0.5 bg-white mb-1"></div>
             <div className="w-6 h-0.5 bg-white mb-1"></div>
             <div className="w-6 h-0.5 bg-white"></div>
-          </button>   
+          </button>
         </div>
 
         <div className="hidden md:flex gap-9 text-xl">
           <Link to="/" className="hover:text-white mb-1">Home</Link>
-          <Link to="/about" className="hover:text-white mb-1">About Us</Link>
-          <Link to="/contact" className="hover:text-white mb-1">Contact Us</Link>
+          <Link to="/aboutus" className="hover:text-white mb-1">About Us</Link>
+          <Link to="/contactus" className="hover:text-white mb-1">Contact Us</Link>
           <Link to="/features" className="hover:text-white mb-1">Features</Link>
           {user?.role === "NGO" && (
-            <Link to="/ngo-portal" className="hover:text-gray-300">
-              NGO Portal
-            </Link>
+            <Link to="/ngo-portal" className="hover:text-gray-300">NGO Portal</Link>
           )}
         </div>
 

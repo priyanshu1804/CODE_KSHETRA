@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 const Contact = () => {
   return (
     <section className="bg-gray-200 py-12 px-6 md:px-12 lg:px-24 text-center">
-      {/* Get in Touch Section Animation */}
       <motion.h2
         className="text-3xl font-bold text-gray-800"
         initial={{ opacity: 0, y: 50 }}

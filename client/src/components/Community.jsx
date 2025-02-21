@@ -8,7 +8,6 @@ import { motion } from 'framer-motion';
 const Community = () => {
   return (
     <section className="bg-white py-12 px-6 md:px-12 lg:px-24 text-center">
-      {/* Community Section Animation */}
       <motion.h2
         className="text-3xl font-bold text-gray-800"
         initial={{ opacity: 0, y: 50 }}

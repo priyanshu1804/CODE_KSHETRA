@@ -1,33 +1,32 @@
 // components/Hero.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
+import { useNavigate } from 'react-router-dom'; 
 import Button from './ui/button';
 import { FaDonate, FaHandsHelping, FaCookie } from 'react-icons/fa';
 import { Typewriter } from 'react-simple-typewriter';
 
 const Hero = () => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
-  // Navigate to Donate page when "Donate Now" is clicked
   const handleDonateNowClick = () => {
     navigate('/donate');
   };
 
-  // Navigate to Request page when "Request Now" is clicked
   const handleRequestNowClick = () => {
     navigate('/request');
   };
 
   return (
-    <section
-  className="flex flex-col items-center text-center py-20 px-6 md:px-12 lg:px-24"
-  style={{
-    backgroundImage: `url('/img.jpg')`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
+//     <section
+//   className="flex flex-col items-center text-center py-20 px-6 md:px-12 lg:px-24"
+//   style={{
+//     backgroundImage: `url('/img.jpg')`,
+//     backgroundSize: "cover",
+//     backgroundPosition: "center",
+//   }}
+// >
+<section className="flex flex-col items-center text-center py-20 px-6 md:px-12 lg:px-24 bg-gradient-to-r from-green-200 to-green-400">
       <motion.h2
         className="text-4xl md:text-5xl font-bold text-gray-800"
         initial={{ opacity: 0, y: -50 }}
@@ -40,7 +39,7 @@ const Hero = () => {
 
       <motion.div
   className="text-gray-600 mt-4 max-w-2xl text-sm md:text-lg"
-  initial={{ opacity: 0, y: -20 }} // Fade in + slight upward motion
+  initial={{ opacity: 0, y: -20 }} 
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 1 }}
 >
@@ -50,8 +49,8 @@ const Hero = () => {
     ]}
     cursor
     cursorStyle="_"
-    typeSpeed={15}  // Faster typing speed
-    deleteSpeed={10} // Faster deleting speed
+    typeSpeed={15}  
+    deleteSpeed={10}
   />
 </motion.div>
 
