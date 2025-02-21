@@ -4,21 +4,9 @@ import { makeAuthenticatedGETRequest } from "../utils/ServerHelpers";
 import { useCookies } from "react-cookie";
 
 const Header = () => {
-  const [visible, setVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [cookies, , removeCookie] = useCookies(["token"]);
   const [user, setUser] = useState(null); // ✅ Set default state to null
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY < lastScrollY);
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
 
   useEffect(() => {
     const getData = async () => {
@@ -41,11 +29,7 @@ const Header = () => {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-screen bg-green-600 text-white shadow-md transition-transform duration-300 ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <header className="fixed top-0 left-0 w-screen bg-green-600 text-white shadow-md">
       <nav className="w-full flex justify-between items-center px-8 py-4">
         <div className="text-2xl font-bold">
           <Link to="/">Food Donation</Link>
@@ -74,12 +58,11 @@ const Header = () => {
         <div className="flex gap-4 hidden md:flex">
           {user ? (
             <div className="flex items-center gap-4">
-            <span className="font-semibold">{user?.Name ?? user?.name ?? "User"}</span>
-            <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
-              Logout
-            </button>
-          </div>
-          
+              <span className="font-semibold">{user?.Name ?? user?.name ?? "User"}</span>
+              <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
+                Logout
+              </button>
+            </div>
           ) : (
             <>
               <Link to="/login">

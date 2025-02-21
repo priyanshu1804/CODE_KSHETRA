@@ -20,7 +20,14 @@ const Hero = () => {
   };
 
   return (
-    <section className="flex flex-col items-center text-center py-20 px-6 md:px-12 lg:px-24 bg-gradient-to-r from-green-200 to-green-400">
+    <section
+  className="flex flex-col items-center text-center py-20 px-6 md:px-12 lg:px-24"
+  style={{
+    backgroundImage: `url('/img.jpg')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
       <motion.h2
         className="text-4xl md:text-5xl font-bold text-gray-800"
         initial={{ opacity: 0, y: -50 }}
@@ -43,7 +50,7 @@ const Hero = () => {
     ]}
     cursor
     cursorStyle="_"
-    typeSpeed={20}  // Faster typing speed
+    typeSpeed={15}  // Faster typing speed
     deleteSpeed={10} // Faster deleting speed
   />
 </motion.div>
