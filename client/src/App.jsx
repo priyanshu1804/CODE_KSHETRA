@@ -3,6 +3,8 @@ import './App.css'
 import HomeComponent from './routes/Home'
 import Login from './routes/Login'
 import Signup from './routes/Signup'
+import AboutUs from './routes/AboutUs'
+import ContactUs from "./routes/ContactUs"; 
 import Donation from './routes/Donation';
 import Request from './routes/Request';
 import NgoPortal from './routes/NgoPortal'
@@ -23,6 +25,8 @@ function App() {
               <Route path="/donate" element={<Donation />} />
               <Route path="/request" element={<Request />} />
               <Route path="/ngo-portal" element={<NgoPortal />} />
+              <Route path="/contactus" element={<ContactUs />} />
+              <Route path="/aboutus" element={<AboutUs />} />
             </>
           </Routes>
         </BrowserRouter>

@@ -1,8 +1,7 @@
 // components/Request.jsx
 import React, { useState } from "react";
 import {makeAuthenticatedPOSTRequest} from "../utils/ServerHelpers";
-import { motion } from "framer-motion"; // For animations
-
+import { motion } from "framer-motion"; 
 const Request = () => {
   const [itemName, setItemName] = useState("");
   const [itemQuantity, setItemQuantity] = useState("");

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {makeAuthenticatedPOSTRequest} from "../utils/ServerHelpers";
+import { makeAuthenticatedPOSTRequest } from "../utils/ServerHelpers";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -13,40 +13,42 @@ const Donation = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
   const submitDonation = async (e) => {
     e.preventDefault();
 
     const data = {
-        Item_names: Item_names, 
-        Item_quantity: Item_quantity, 
-        Item_pics: Item_pics, 
-        donor_name: donor_name, 
-        donor_email: donor_email, 
-        donor_phone: donor_phone
+      Item_names,
+      Item_quantity,
+      Item_pics,
+      donor_name,
+      donor_email,
+      donor_phone,
     };
 
-    console.log("Sending data to backend:", data); // Debugging step
+    console.log("Sending data to backend:", data);
 
     const response = await makeAuthenticatedPOSTRequest("/donate/", data);
-    
+
     if (response.err) {
-        setError("Could not create donation");
-        return;
+      setError("Could not create donation");
+      return;
     }
     setSuccess("Donation created successfully!");
     setTimeout(() => navigate("/"), 2000);
-};
-
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 p-6">
-      <motion.div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md mx-auto">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800 text-center">Donation Form</h2>
+    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-[#0a0f2c] to-[#1a1f4c] p-6">
+      <motion.div className="bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl border border-white/20 w-full max-w-2xl">
+        <h2 className="text-4xl font-bold mb-6 text-center text-white drop-shadow-md">
+          Donation Form
+        </h2>
 
         {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
-        {success && <p className="text-green-500 text-sm text-center mb-4">{success}</p>}
+        {success && <p className="text-green-400 text-sm text-center mb-4">{success}</p>}
 
-        <form onSubmit={submitDonation} className="space-y-4">
+        <form onSubmit={submitDonation} className="space-y-5">
           <InputField label="Item Name" value={Item_names} setValue={setItemName} type="text" />
           <InputField label="Item Quantity" value={Item_quantity} setValue={setItemQuantity} type="number" />
           <InputField label="Item Image (URL)" value={Item_pics} setValue={setItemPic} type="text" />
@@ -54,9 +56,10 @@ const Donation = () => {
           <InputField label="Donor Email" value={donor_email} setValue={setDonorEmail} type="email" />
           <InputField label="Donor Phone" value={donor_phone} setValue={setDonorPhone} type="text" />
 
-          <motion.button 
-            type="submit" 
-            className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-all">
+          <motion.button
+            type="submit"
+            className="w-full bg-[#1a2b5c] text-white py-4 rounded-xl hover:bg-[#2a3c7c] transition-all text-lg font-semibold shadow-lg"
+          >
             Donate Now
           </motion.button>
         </form>
@@ -65,11 +68,16 @@ const Donation = () => {
   );
 };
 
-// Reusable Input Component
 const InputField = ({ label, value, setValue, type }) => (
   <div>
-    <label className="block text-gray-700 text-lg font-medium">{label}:</label>
-    <input type={type} value={value} onChange={(e) => setValue(e.target.value)} className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-md text-black" required />
+    <label className="block text-white text-lg font-medium mb-2">{label}:</label>
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      className="w-full px-6 py-4 bg-[#1a1f4c] text-white border border-white/30 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-lg"
+      required
+    />
   </div>
 );
 
