@@ -29,9 +29,11 @@ const Community = () => {
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
-        <Button className="bg-green-600 text-white mt-4 flex items-center gap-2">
-          <FaUsers /> Join Now
-        </Button>
+      <Button className="border-2 border-[#140649] text-[#180e4a] flex items-center gap-2 px-4 py-2 rounded-md shadow-md shadow-[#35324c] 
+        hover:bg-[#ebf0f1] hover:text-[#001f3f] transition duration-300 ease-in-out hover:shadow-lg hover:shadow-[#312e45]">
+        <FaUsers /> Join Now
+      </Button>
+
       </motion.div>
     </section>
   );
