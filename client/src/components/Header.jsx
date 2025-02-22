@@ -41,13 +41,9 @@ const Header = () => {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-screen bg-green-600 text-white shadow-md transition-transform duration-300 ${
-        visible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <header className="fixed top-0 left-0 w-screen bg-[#0a0f2c] text-white shadow-md ">
       <nav className="w-full flex justify-between items-center px-8 py-4">
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-bold drop-shadow-[0_0_5px_#e0e0ff]">
           <Link to="/">Food Donation</Link>
         </div>
 
@@ -59,22 +55,13 @@ const Header = () => {
           </button>
         </div>
 
-        <div className="hidden md:flex gap-6">
-          <Link to="/" className="hover:text-gray-300">Home</Link>
-          <Link to="/about" className="hover:text-gray-300">About Us</Link>
-          <Link to="/contact" className="hover:text-gray-300">Contact Us</Link>
-          <Link to="/features" className="hover:text-gray-300">Features</Link>
-          <Link to="/messages" className="hover:text-gray-300">Messages</Link>
-
+        <div className="hidden md:flex gap-9 text-xl drop-shadow-[0_0_10px_#e0e0ff]">
+          <Link to="/" className="hover:text-[#9a9e9f] transition duration-300">Home</Link>
+          <Link to="/aboutus" className="hover:text-[#969999] transition duration-300">About Us</Link>
+          <Link to="/contactus" className="hover:text-[#9d9e9e] transition duration-300">Contact Us</Link>
+          <Link to="/features" className="hover:text-[#888a8b] transition duration-300">Features</Link>
           {user?.role === "NGO" && (
-            <Link to="/ngo-portal" className="hover:text-gray-300">
-              NGO Portal
-            </Link>
-          )}
-          {(user?.role === "Resturent"||user?.role === "Individual") && (
-            <Link to="/request-portal" className="hover:text-gray-300">
-              Request Portal
-            </Link>
+            <Link to="/ngo-portal" className="hover:text-[#00d9ff] transition duration-300">NGO Portal</Link>
           )}
         </div>
 
@@ -82,19 +69,19 @@ const Header = () => {
           {user ? (
             <div className="flex items-center gap-4">
               <span className="font-semibold">{user?.Name ?? user?.name ?? "User"}</span>
-              <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700">
+              <button onClick={handleLogout} className="px-4 py-2 bg-[#ff0000] text-white rounded-md border-2 border-[#ff0000] hover:bg-[#ff3333] hover:border-[#ff3333] transition duration-300">
                 Logout
               </button>
             </div>
           ) : (
             <>
               <Link to="/login">
-                <button className="px-4 py-2 bg-white text-green-600 rounded hover:bg-green-200">
+              <button className="px-4 py-2 bg-[#e0e0ff] text-[#0a0f2c] flex items-center gap-2 shadow-lg rounded-md border-2 border-[#e0e0ff] hover:bg-transparent hover:text-white transition duration-300">
                   Login
                 </button>
               </Link>
               <Link to="/signup">
-                <button className="px-4 py-2 bg-white text-green-600 rounded hover:bg-green-200">
+                <button className="px-4 py-2 bg-[#e0e0ff] text-[#0a0f2c] flex items-center gap-2 shadow-lg rounded-md border-2 border-[#e0e0ff] hover:bg-transparent hover:text-white transition duration-300">
                   Sign Up
                 </button>
               </Link>
@@ -107,4 +94,3 @@ const Header = () => {
 };
 
 export default Header;
-
