@@ -44,7 +44,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 w-screen bg-[#0a0f2c] text-white shadow-md ">
       <nav className="w-full flex justify-between items-center px-8 py-4">
         <div className="text-2xl font-bold drop-shadow-[0_0_5px_#e0e0ff]">
-          <Link to="/">Food Donation</Link>
+          <Link to="/">Nourish Connect</Link>
         </div>
 
         <div className="md:hidden flex items-center" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
