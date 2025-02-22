@@ -1,50 +1,47 @@
 const express = require("express");
 const router = express.Router();
-const Food = require("../models/donate");
+const Donate = require("../models/donate"); // Update model name
 const passport = require("passport");
 const multer = require("multer");
+const mongoose = require("mongoose");
 
-// Configure Multer for image uploads (stores in memory)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// POST route - Create a donation with image upload
+// Create a donation
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
-  upload.single("Item_pics"), // Handle single image upload
+  upload.single("Item_pics"),
   async (req, res) => {
     try {
-      // Fetch user details
       const user = req.user;
-
-      // Restrict NGOs from donating
       if (user.role === "NGO") {
         console.log("NGO tried to donate");
         return res.status(403).json({ error: "Access denied. NGOs cannot donate." });
       }
 
-      // Extract donation details
-      const { Item_names, Item_quantity, donor_name, donor_email, donor_phone } = req.body;
+      const {Item_names, Item_quantity, donor_name, donor_email, donor_phone, donor_address } = req.body;
 
-      if (!Item_names || !Item_quantity || !donor_name || !donor_email || !donor_phone || !req.file) {
+      if (!Item_names || !Item_quantity || !donor_name || !donor_email || !donor_phone || !donor_address || !req.file) {
         return res.status(400).json({ error: "Please fill all required fields, including an image" });
       }
 
-      // Create new donation
-      const newFood = await Food.create({
+      const newDonation = await Donate.create({
+        donor_id: user._id, 
         Item_names,
         Item_quantity,
         Item_pics: {
-          data: req.file.buffer, // Store image as binary data
-          contentType: req.file.mimetype, // Store image type (e.g., image/png)
+          data: req.file.buffer,
+          contentType: req.file.mimetype,
         },
         donor_name,
         donor_email,
         donor_phone,
+        donor_address,
       });
 
-      return res.status(201).json({ message: "Donation created successfully!", donation: newFood });
+      return res.status(201).json({ message: "Donation created successfully!", donation: newDonation });
 
     } catch (error) {
       console.error("Error creating donation:", error);
@@ -52,20 +49,22 @@ router.post(
     }
   }
 );
-
-// GET route - Fetch all donations
-router.get("/", async (req, res) => {
+router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
   try {
-    const donations = await Food.find({});
+    const user = req.user;
+    if (user.role !== "NGO") {
+      return res.status(403).json({ error: "Access denied. Only NGOs can view donations." });
+    }
+
+    const donations = await Donate.find({});
 
     if (!donations.length) {
       return res.status(404).json({ message: "No donations found" });
     }
 
-    // Convert image buffer to Base64 for frontend rendering
     const formattedDonations = donations.map(donation => ({
       ...donation._doc,
-      Item_pics: donation.Item_pics && donation.Item_pics.data
+      Item_pics: donation.Item_pics?.data
         ? `data:${donation.Item_pics.contentType};base64,${donation.Item_pics.data.toString("base64")}`
         : null
     }));
@@ -76,6 +75,57 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+router.put("/approve/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  try {
+    const user = req.user;
+    
+    if (user.role !== "NGO") {
+      return res.status(403).json({ error: "Access denied. Only NGOs can approve donations." });
+    }
 
+    const donationId = req.params.id;
+    const donation = await Donate.findById(donationId);
+
+    if (!donation) {
+      return res.status(404).json({ error: "Donation not found" });
+    }
+
+    if (donation.status === "approved") {
+      return res.status(400).json({ error: "Donation is already approved" });
+    }
+
+    donation.status = "approved";
+    donation.ngo_id = user._id;
+    await donation.save();
+
+    res.status(200).json({ message: "Donation approved successfully", donation });
+
+  } catch (error) {
+    console.error("Error approving donation:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+router.delete("/:id", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  try {
+    const user = req.user;
+    const donationId = req.params.id;
+    const donation = await Donate.findById(donationId);
+
+    if (!donation) {
+      return res.status(404).json({ error: "Donation not found" });
+    }
+
+    if (donation.donor_id.toString() !== user._id.toString() && donation.ngo_id?.toString() !== user._id.toString()) {
+      return res.status(403).json({ error: "Access denied. You can only delete your own donations." });
+    }
+
+    await donation.deleteOne();
+    return res.status(200).json({ message: "Donation deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting donation:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
 module.exports = router;

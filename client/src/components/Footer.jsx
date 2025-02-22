@@ -6,8 +6,6 @@ const Footer = () => {
     <footer className="top-0 left-0 w-screen bg-gray-900 text-white py-8">
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-          
-          {/* About Us */}
           <div>
             <h2 className="text-lg font-semibold">About Us</h2>
             <p className="mt-2 text-gray-400">
@@ -15,8 +13,6 @@ const Footer = () => {
               difference by donating surplus food to those in need.
             </p>
           </div>
-
-          {/* Quick Links */}
           <div>
             <h2 className="text-lg font-semibold">Quick Links</h2>
             <ul className="mt-2 space-y-2">
@@ -26,8 +22,6 @@ const Footer = () => {
               <li><Link to="/features" className="text-gray-400 hover:text-white">Features</Link></li>
             </ul>
           </div>
-
-          {/* Find Us - Map */}
           <div>
             <h2 className="text-lg font-semibold">Find Us</h2>
             <iframe
@@ -39,8 +33,6 @@ const Footer = () => {
           </div>
 
         </div>
-
-        {/* Copyright & Social Media */}
         <div className="border-t border-gray-700 mt-6 pt-4 text-center">
           <p className="text-gray-400">© 2025 STUCKED-IN-TLE. All Rights Reserved.</p>
           <div className="mt-2">

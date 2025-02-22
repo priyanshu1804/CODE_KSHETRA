@@ -8,7 +8,7 @@ const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [cookies, , removeCookie] = useCookies(["token"]);
-  const [user, setUser] = useState(null); // ✅ Set default state to null
+  const [user, setUser] = useState(null); 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,8 +24,7 @@ const Header = () => {
     const getData = async () => {
       try {
         const response = await makeAuthenticatedGETRequest("/auth/profile");
-        console.log("User data received:", response);
-        setUser(response?.data || response); // ✅ Ensure correct data is set
+        setUser(response?.data || response);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -64,15 +63,13 @@ const Header = () => {
           <Link to="/about" className="hover:text-gray-300">About Us</Link>
           <Link to="/contact" className="hover:text-gray-300">Contact Us</Link>
           <Link to="/features" className="hover:text-gray-300">Features</Link>
+          <Link to="/messages" className="hover:text-gray-300">Messages</Link>
 
-          {/* Show NGO Portal only for NGOs */}
           {user?.role === "NGO" && (
             <Link to="/ngo-portal" className="hover:text-gray-300">
               NGO Portal
             </Link>
           )}
-
-          {/* Show Request Portal for Restaurants & Individuals */}
           {(user?.role === "Resturent"||user?.role === "Individual") && (
             <Link to="/request-portal" className="hover:text-gray-300">
               Request Portal

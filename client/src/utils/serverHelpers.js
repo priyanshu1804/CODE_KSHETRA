@@ -13,8 +13,6 @@ export const makeUnauthenticatedPOSTRequest = async (route, body) => {
 
 export const makeAuthenticatedPOSTRequest = async (route, body, isFormData = false) => {
     const token = getToken();
-    
-    // Headers object (exclude 'Content-Type' for FormData)
     const headers = {
         Authorization: `Bearer ${token}`,
     };
@@ -26,7 +24,7 @@ export const makeAuthenticatedPOSTRequest = async (route, body, isFormData = fal
     const response = await fetch(backendUrl + route, {
         method: "POST",
         headers: isFormData ? headers : { ...headers, "Content-Type": "application/json" },
-        body: body, // FormData or JSON
+        body: body, 
     });
 
     return await response.json();
@@ -41,6 +39,18 @@ export const makeAuthenticatedGETRequest = async (route) => {
             Authorization: `Bearer ${token}`,
         },
     });
+    return await response.json();
+};
+export const makeAuthenticatedDELETERequest = async (route) => {
+    const token = getToken();
+    const response = await fetch(backendUrl + route, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
     return await response.json();
 };
 

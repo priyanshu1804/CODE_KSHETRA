@@ -1,19 +1,15 @@
-// components/Hero.jsx
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
+import { useNavigate } from 'react-router-dom'; 
 import Button from './ui/button';
 import { FaDonate, FaHandsHelping } from 'react-icons/fa';
 
 const Hero = () => {
-  const navigate = useNavigate(); // Initialize navigate
-
-  // Navigate to Donate page when "Donate Now" is clicked
+  const navigate = useNavigate(); 
   const handleDonateNowClick = () => {
     navigate('/donate');
   };
-
-  // Navigate to Request page when "Request Now" is clicked
   const handleRequestNowClick = () => {
     navigate('/request');
   };
