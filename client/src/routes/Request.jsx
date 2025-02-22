@@ -1,7 +1,7 @@
-// components/Request.jsx
+
 import React, { useState } from "react";
 import {makeAuthenticatedPOSTRequest} from "../utils/ServerHelpers";
-import { motion } from "framer-motion"; // For animations
+import { motion } from "framer-motion";
 
 const Request = () => {
   const [itemName, setItemName] = useState("");
@@ -16,8 +16,6 @@ const Request = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
-
-    // Validate all fields
     if (!itemName || !itemQuantity || !requesterName || !requesterEmail || !requesterPhone) {
       setError("All fields are required!");
       return;

@@ -2,25 +2,17 @@ const express = require("express");
 const router = express.Router();
 const Food = require("./../models/Request");
 const passport = require("passport");
-
-// Allow only NGOs to request food
 router.post("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
     try {
         const user = req.user;
-
-        // Restrict access: Only NGOs can request food
         if (user.role !== "NGO") {
             return res.status(403).json({ error: "Access denied. Only NGOs can request food." });
         }
-
-        // Extract request details
         const { Item_names, Item_quantity, requester_name, requester_email, requester_phone } = req.body;
 
         if (!Item_names || !Item_quantity || !requester_name || !requester_email || !requester_phone) {
             return res.status(400).json({ error: "Please fill all the fields" });
         }
-
-        // Save food request
         const newFoodRequest = await Food.create({
             Item_names,
             Item_quantity,
@@ -37,14 +29,10 @@ router.post("/", passport.authenticate("jwt", { session: false }), async (req, r
         return res.status(500).json({ error: "Server error" });
     }
 });
-
-// Delete a food request (Only NGOs can delete their own requests)
 router.delete("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
     try {
         const user = req.user;
-
-        // Restrict access: Only NGOs can delete requests
-        if (user.role !== "NGO") {
+        if (user.role === "NGO") {
             return res.status(403).json({ error: "Access denied. Only NGOs can delete their requests." });
         }
 
@@ -66,18 +54,15 @@ router.delete("/", passport.authenticate("jwt", { session: false }), async (req,
         return res.status(500).json({ error: "Server error" });
     }
 });
-
-// Get all food requests (Only NGOs can view their requests)
 router.get("/", passport.authenticate("jwt", { session: false }), async (req, res) => {
     try {
         const user = req.user;
-
-        // Restrict access: Only NGOs can view their requests
-        if (user.role !== "NGO") {
+        if (user.role === "NGO") {
             return res.status(403).json({ error: "Access denied. Only NGOs can view food requests." });
         }
 
         const ngoRequests = await Food.find({ user: user._id });
+        console.log("Food requests:", ngoRequests);
         return res.status(200).json({ data: ngoRequests });
 
     } catch (error) {

@@ -1,42 +1,48 @@
 import { useState } from "react";
-import {makeAuthenticatedPOSTRequest} from "../utils/ServerHelpers";
+import { makeAuthenticatedPOSTRequest } from "../utils/ServerHelpers";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const Donation = () => {
   const [Item_names, setItemName] = useState("");
   const [Item_quantity, setItemQuantity] = useState("");
-  const [Item_pics, setItemPic] = useState("");
+  const [Item_pics, setItemPic] = useState(null); 
   const [donor_name, setDonorName] = useState("");
   const [donor_email, setDonorEmail] = useState("");
   const [donor_phone, setDonorPhone] = useState("");
+  const [donor_address, setDonorAddress] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
   const submitDonation = async (e) => {
     e.preventDefault();
 
-    const data = {
-        Item_names: Item_names, 
-        Item_quantity: Item_quantity, 
-        Item_pics: Item_pics, 
-        donor_name: donor_name, 
-        donor_email: donor_email, 
-        donor_phone: donor_phone
-    };
+    if (!Item_pics) {
+      setError("Please upload an image.");
+      return;
+    }
 
-    console.log("Sending data to backend:", data); // Debugging step
+    const formData = new FormData();
+    formData.append("Item_names", Item_names);
+    formData.append("Item_quantity", Item_quantity);
+    formData.append("Item_pics", Item_pics); 
+    formData.append("donor_name", donor_name);
+    formData.append("donor_email", donor_email);
+    formData.append("donor_phone", donor_phone);
+    formData.append("donor_address", donor_address);
 
-    const response = await makeAuthenticatedPOSTRequest("/donate/", data);
-    
+    console.log("Sending data to backend:", formData); 
+
+    const response = await makeAuthenticatedPOSTRequest("/donate/", formData, true); 
+
     if (response.err) {
-        setError("Could not create donation");
-        return;
+      setError("Could not create donation");
+      return;
     }
     setSuccess("Donation created successfully!");
     setTimeout(() => navigate("/"), 2000);
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 p-6">
@@ -49,10 +55,23 @@ const Donation = () => {
         <form onSubmit={submitDonation} className="space-y-4">
           <InputField label="Item Name" value={Item_names} setValue={setItemName} type="text" />
           <InputField label="Item Quantity" value={Item_quantity} setValue={setItemQuantity} type="number" />
-          <InputField label="Item Image (URL)" value={Item_pics} setValue={setItemPic} type="text" />
+          
+          {/* Image Upload Input */}
+          <div>
+            <label className="block text-gray-700 text-lg font-medium">Item Image:</label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={(e) => setItemPic(e.target.files[0])} 
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-md text-black"
+              required 
+            />
+          </div>
+
           <InputField label="Donor Name" value={donor_name} setValue={setDonorName} type="text" />
           <InputField label="Donor Email" value={donor_email} setValue={setDonorEmail} type="email" />
           <InputField label="Donor Phone" value={donor_phone} setValue={setDonorPhone} type="text" />
+          <InputField label="Donor Address" value={donor_address} setValue={setDonorAddress} type="text" />
 
           <motion.button 
             type="submit" 
@@ -64,8 +83,6 @@ const Donation = () => {
     </div>
   );
 };
-
-// Reusable Input Component
 const InputField = ({ label, value, setValue, type }) => (
   <div>
     <label className="block text-gray-700 text-lg font-medium">{label}:</label>
