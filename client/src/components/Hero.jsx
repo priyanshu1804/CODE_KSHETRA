@@ -1,5 +1,7 @@
 
 
+
+
 // components/Hero.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
@@ -13,10 +15,6 @@ const Hero = () => {
 
   const handleDonateNowClick = () => {
     navigate('/donate');
-  };
-
-  const handleDonateNowClick1 = () => {
-    navigate('/donatee');
   };
 
   const handleRequestNowClick = () => {
@@ -57,7 +55,7 @@ const Hero = () => {
 
 <div className="flex flex-col md:flex-row gap-6 mt-6">
         <motion.div whileHover={{ scale: 1.1 }}>
-          <Button className="bg-[#e0e0ff] text-[#0a0f2c] flex items-center gap-2 shadow-s shadow-[#8faba2]" onClick={handleDonateNowClick1}>
+          <Button className="bg-[#e0e0ff] text-[#0a0f2c] flex items-center gap-2 shadow-s shadow-[#8faba2]" onClick={handleDonateNowClick}>
             <FaDonate /> Donate Money
           </Button>
         </motion.div>
