@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { makeAuthenticatedGETRequest } from "../utils/ServerHelpers";
@@ -106,3 +107,4 @@ const Header = () => {
 };
 
 export default Header;
+
