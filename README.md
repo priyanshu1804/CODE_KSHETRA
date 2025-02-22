@@ -19,7 +19,7 @@
 NourishConnect seeks to tackle two major global issues: food waste and hunger. Every day, tons of food are wasted at various establishments while millions of people are struggling with hunger. NourishConnect’s mission is to create a direct connection between those who have surplus food and those in need.
 
 ## Problem Statement
-
+A DIGITAL PLATFORM TO ELIMINATE FOOD WASTAGE AND HUNGER IN UNDERSERVED CIRCULATIONS
 ### The Problem: Food Waste and Hunger
 
 - "Every day, tons of food are wasted at restaurants, hotels, and events."
@@ -28,6 +28,8 @@ NourishConnect seeks to tackle two major global issues: food waste and hunger. E
 This problem is exacerbated by the lack of systems that can connect those with surplus food to individuals or organizations in need.
 
 ## Our Solution
+NourishConnect doesn’t just donate food—it transforms how food waste is managed!
+Tons of food go to waste daily while millions remain hungry. NourishConnect bridges this gap by seamlessly connecting food donors with those in need, reducing waste and fighting hunger efficiently.
 
 ### NourishConnect
 
@@ -61,8 +63,8 @@ The platform has already made a significant impact by facilitating donations, pr
 
 ### What People Are Saying
 
-- "NourishConnect has made it so easy for us to donate surplus food and make a real difference." — [Donor Name]
-- "Thanks to NourishConnect, we were able to feed hundreds of people who otherwise would have gone hungry." — [Recipient Name]
+- "NourishConnect has made it so easy for us to donate surplus food and make a real difference." 
+- "Thanks to NourishConnect, we were able to feed hundreds of people who otherwise would have gone hungry."
 
 ## Call to Action
 
@@ -74,5 +76,5 @@ The platform has already made a significant impact by facilitating donations, pr
 ## Contact Us
 
 - *Email*: [info@nourishconnect.com](mailto:info@nourishconnect.com)
-- *Phone*: +1-234-567-890
-- *Social Media*: [Facebook](#), [Twitter](#), [Instagram](#)
+- *Phone*: +91 8287171506
+- *Social Media*: @nourishconnect
