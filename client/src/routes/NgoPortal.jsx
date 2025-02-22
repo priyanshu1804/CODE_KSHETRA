@@ -3,8 +3,8 @@ import DonationCard from "../components/DonationCard";
 import { makeAuthenticatedGETRequest } from "../utils/ServerHelpers";
 
 const NgoPortal = () => {
-  const [donations, setDonations] = useState([]); // ✅ Always an array
-  const [error, setError] = useState(""); // ✅ Stores error messages
+  const [donations, setDonations] = useState([]);
+  const [error, setError] = useState(""); 
 
   useEffect(() => {
     const fetchDonations = async () => {

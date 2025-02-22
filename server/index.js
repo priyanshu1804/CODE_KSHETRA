@@ -13,6 +13,8 @@ const UserRoute = require("./routes/User");
 const DonateRoute = require("./routes/Donate");
 const Request = require("./models/Request");
 const RequestRoute = require("./routes/Request");
+const Message=require("./models/message");
+const MessageRoute=require("./routes/Message");
 const cors = require("cors");
 const { compareSync } = require("bcrypt");
 app.use(
@@ -46,6 +48,7 @@ const PORT = process.env.PORT || 3000;
 app.use("/auth", UserRoute);
 app.use("/donate", DonateRoute);
 app.use("/request", RequestRoute);
+app.use("/message",MessageRoute);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
