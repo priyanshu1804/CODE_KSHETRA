@@ -1,4 +1,4 @@
-// components/Features.jsx
+
 import React from 'react';
 import FeatureCard from './FeatureCard';
 import { FaDonate, FaHandsHelping } from 'react-icons/fa';

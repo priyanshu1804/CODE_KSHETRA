@@ -6,10 +6,11 @@ import { useNavigate } from "react-router-dom";
 const Donation = () => {
   const [Item_names, setItemName] = useState("");
   const [Item_quantity, setItemQuantity] = useState("");
-  const [Item_pics, setItemPic] = useState("");
+  const [Item_pics, setItemPic] = useState(null); 
   const [donor_name, setDonorName] = useState("");
   const [donor_email, setDonorEmail] = useState("");
   const [donor_phone, setDonorPhone] = useState("");
+  const [donor_address, setDonorAddress] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
@@ -18,18 +19,18 @@ const Donation = () => {
     e.preventDefault();
 
     const data = {
-      Item_names,
-      Item_quantity,
-      Item_pics,
-      donor_name,
-      donor_email,
-      donor_phone,
+        Item_names: Item_names, 
+        Item_quantity: Item_quantity, 
+        Item_pics: Item_pics, 
+        donor_name: donor_name, 
+        donor_email: donor_email, 
+        donor_phone: donor_phone
     };
 
-    console.log("Sending data to backend:", data);
+    console.log("Sending data to backend:", data); // Debugging step
 
     const response = await makeAuthenticatedPOSTRequest("/donate/", data);
-
+    
     if (response.err) {
       setError("Could not create donation");
       return;
@@ -51,10 +52,23 @@ const Donation = () => {
         <form onSubmit={submitDonation} className="space-y-5">
           <InputField label="Item Name" value={Item_names} setValue={setItemName} type="text" />
           <InputField label="Item Quantity" value={Item_quantity} setValue={setItemQuantity} type="number" />
-          <InputField label="Item Image (URL)" value={Item_pics} setValue={setItemPic} type="text" />
+          
+          {/* Image Upload Input */}
+          <div>
+            <label className="block text-gray-700 text-lg font-medium">Item Image:</label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={(e) => setItemPic(e.target.files[0])} 
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-md text-black"
+              required 
+            />
+          </div>
+
           <InputField label="Donor Name" value={donor_name} setValue={setDonorName} type="text" />
           <InputField label="Donor Email" value={donor_email} setValue={setDonorEmail} type="email" />
           <InputField label="Donor Phone" value={donor_phone} setValue={setDonorPhone} type="text" />
+          <InputField label="Donor Address" value={donor_address} setValue={setDonorAddress} type="text" />
 
           <motion.button
             type="submit"
@@ -68,6 +82,7 @@ const Donation = () => {
   );
 };
 
+// Reusable Input Component
 const InputField = ({ label, value, setValue, type }) => (
   <div>
     <label className="block text-white text-lg font-medium mb-2">{label}:</label>

@@ -1,4 +1,4 @@
-// components/Contact.jsx
+
 import React from 'react';
 import Button from './ui/button';
 import { MdOutlineContactPhone } from 'react-icons/md';
