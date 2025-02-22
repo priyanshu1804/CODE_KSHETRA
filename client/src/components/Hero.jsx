@@ -21,7 +21,7 @@ const Hero = () => {
   return (
     <section className="flex flex-col items-center text-center py-20 px-6 md:px-12 lg:px-24 bg-gradient-to-r from-green-200 to-green-400">
       <motion.h2
-        className="text-4xl md:text-5xl font-bold text-gray-800"
+        className="text-4xl md:text-5xl font-bold text-gray-850"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
